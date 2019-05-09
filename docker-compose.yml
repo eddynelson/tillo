@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  user-api:
+    build: ./tillo-user-api
+    restart: always
+    ports:
+      - "4000:4000"
+    links:
+      - "tillobase:tillobase"
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DB_USER: tillo
+      DB_PASS: tillo
+      DB_NAME: tillobase
+      DB_PORT: 5432
+      DB_HOST: tillobase
+
+  tillobase:
+    image: postgres:10.7
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: tillo
+      POSTGRES_USER: tillo
+      POSTGRES_DB: tillobase
+    volumes:
+      - user-tillo-data:/var/lib/postgresql/data
+
+volumes:
+  user-tillo-data:

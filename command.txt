@@ -1,0 +1,20 @@
+#run postgresql container
+docker run -d \
+-p 9000:5432 \
+--name tillobase \
+-v user-tillo-data:/var/lib/postgresql/data \
+-e POSTGRES_PASSWORD=tillo \
+-e POSTGRES_USER=tillo \
+-e POSTGRES_DB=tillobase \
+--network tillobase-tillouser-net \
+ postgres:10.7
+
+docker run -d \
+-p 4000:4000 \
+--name tillo-user-api \
+-e DB_USER=tillo \
+-e DB_PASS=tillo \
+-e DB_NAME=tillobase \
+-e DB_PORT=5432
+--network tillobase-tillouser-net \
+eddydecena/tillo-user-api:latest
